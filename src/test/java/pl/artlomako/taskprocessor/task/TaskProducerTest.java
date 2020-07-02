@@ -1,13 +1,12 @@
-package pl.artlomako.taskprocessor;
+package pl.artlomako.taskprocessor.task;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static pl.artlomako.taskprocessor.ConcurrencyTestUtils.*;
+import static pl.artlomako.taskprocessor.ConcurrencyTestUtils.executeInThreads;
+import static pl.artlomako.taskprocessor.ConcurrencyTestUtils.waitForThreadsState;
 
 class TaskProducerTest {
     private static final int QUEUE_SIZE_LIMIT = 9;
@@ -25,7 +24,7 @@ class TaskProducerTest {
     }
 
     private List<Thread> executeProducerInMultipleThreads(TaskQueue queue) {
-        TaskProducer taskProducer = new TaskProducer(queue);
+        TaskProducer taskProducer = new TaskProducer(queue, TaskFactory::createDummy);
         return executeInThreads(taskProducer::run, THREADS_COUNT);
     }
 }

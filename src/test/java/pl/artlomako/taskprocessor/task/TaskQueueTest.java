@@ -1,4 +1,4 @@
-package pl.artlomako.taskprocessor;
+package pl.artlomako.taskprocessor.task;
 
 import org.junit.jupiter.api.Test;
 
@@ -136,6 +136,6 @@ class TaskQueueTest {
     }
 
     private Task createTask() {
-        return new Task("");
+        return TaskFactory.createDummy();
     }
 }

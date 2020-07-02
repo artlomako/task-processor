@@ -1,4 +1,4 @@
-package pl.artlomako.taskprocessor;
+package pl.artlomako.taskprocessor.task;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

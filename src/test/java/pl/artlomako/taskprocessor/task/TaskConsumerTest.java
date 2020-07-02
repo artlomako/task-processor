@@ -1,15 +1,14 @@
-package pl.artlomako.taskprocessor;
+package pl.artlomako.taskprocessor.task;
 
-import com.google.code.tempusfugit.temporal.*;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static pl.artlomako.taskprocessor.ConcurrencyTestUtils.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static pl.artlomako.taskprocessor.ConcurrencyTestUtils.executeInThreads;
+import static pl.artlomako.taskprocessor.ConcurrencyTestUtils.waitForThreadsState;
 
 class TaskConsumerTest {
     private static final int QUEUE_SIZE_LIMIT = 9;
@@ -21,7 +20,7 @@ class TaskConsumerTest {
         TaskQueue queue = new TaskQueue(QUEUE_SIZE_LIMIT);
         List<Task> tasksInQueue = new ArrayList<>();
         for (int i = 0; i < QUEUE_SIZE_LIMIT / 2; i++) {
-            Task task = createTask();
+            Task task = TaskFactory.createDummy();
             queue.push(task);
             tasksInQueue.add(task);
         }
@@ -36,10 +35,6 @@ class TaskConsumerTest {
         assertTrue(allTasksCompleted);
     }
 
-
-    private Task createTask() {
-        return new Task("");
-    }
 
     private List<Thread> executeConsumerInMultipleThreads(TaskQueue queue) {
         TaskConsumer taskConsumer = new TaskConsumer(queue);

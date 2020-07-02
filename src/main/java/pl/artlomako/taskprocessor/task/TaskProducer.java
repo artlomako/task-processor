@@ -1,16 +1,18 @@
-package pl.artlomako.taskprocessor;
+package pl.artlomako.taskprocessor.task;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.LocalDateTime;
+import java.util.function.Supplier;
 
 public class TaskProducer implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskProducer.class);
     private final TaskQueue taskQueue;
+    private final Supplier<Task> createTask;
 
-    public TaskProducer(TaskQueue queue) {
+    public TaskProducer(TaskQueue queue, Supplier<Task> createTask) {
         this.taskQueue = queue;
+        this.createTask = createTask;
     }
 
     @Override
@@ -22,18 +24,11 @@ public class TaskProducer implements Runnable {
 
     public void pushTaskToQueue() {
         try {
-            Task task = createTask();
+            Task task = this.createTask.get();
             this.taskQueue.push(task);
         } catch (Exception e) {
             LOGGER.error("Exception occurred on producing task", e);
         }
     }
 
-    private Task createTask() {
-        LOGGER.info("Trying to produce task");
-        String taskExpression = LocalDateTime.now().toString();
-        Task task = new Task(taskExpression);
-        LOGGER.info("Produced task {}", task);
-        return task;
-    }
 }

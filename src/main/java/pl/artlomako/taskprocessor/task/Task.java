@@ -1,27 +1,26 @@
-package pl.artlomako.taskprocessor;
+package pl.artlomako.taskprocessor.task;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 public class Task {
     private static final Logger LOGGER = LoggerFactory.getLogger(Task.class);
-    private final String expression;
+
+    private final String name;
+    private final Runnable body;
+
     private boolean completed = false;
 
-    public Task(String expression) {
-        this.expression = expression;
+    public Task(String name, Runnable body) {
+        this.name = name;
+        this.body = body;
     }
 
     public void execute() {
         LOGGER.info("Executing task {}", this);
-        try {
-            Thread.sleep(ThreadLocalRandom.current().nextInt(1000));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        this.body.run();
         this.completed = true;
+        LOGGER.info("Task execution completed {}", this);
     }
 
     public boolean isCompleted() {
@@ -31,7 +30,7 @@ public class Task {
     @Override
     public String toString() {
         return "Task{" +
-                "expression='" + expression + '\'' +
+                "name='" + name + '\'' +
                 '}';
     }
 }
