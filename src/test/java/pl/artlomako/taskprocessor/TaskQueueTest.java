@@ -3,7 +3,6 @@ package pl.artlomako.taskprocessor;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static pl.artlomako.taskprocessor.ConcurrencyTestUtils.*;
