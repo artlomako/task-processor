@@ -9,7 +9,7 @@ public class InfixExpressionCalculator {
     private static final Logger LOGGER = LoggerFactory.getLogger(InfixExpressionCalculator.class);
 
     public static BigDecimal calculate(String infixExpression) {
-        LOGGER.info("Calculating infix expression [{}]", infixExpression);
+        LOGGER.debug("Calculating infix expression [{}]", infixExpression);
         String rpnExpression = InfixToRPNExpressionConverter.convert(infixExpression);
         BigDecimal result = RPNExpressionCalculator.calculate(rpnExpression);
         LOGGER.info("Infix expression calculated [{}]. Result: [{}]", infixExpression, result);

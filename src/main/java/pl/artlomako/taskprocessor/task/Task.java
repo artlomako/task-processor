@@ -17,10 +17,10 @@ public class Task {
     }
 
     public void execute() {
-        LOGGER.info("Executing task {}", this);
+        LOGGER.debug("Executing task {}", this);
         this.body.run();
         this.completed = true;
-        LOGGER.info("Task execution completed {}", this);
+        LOGGER.debug("Task execution completed {}", this);
     }
 
     public boolean isCompleted() {

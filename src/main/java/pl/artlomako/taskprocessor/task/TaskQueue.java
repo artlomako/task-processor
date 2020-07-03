@@ -36,7 +36,7 @@ public class TaskQueue {
             }
 
             this.tasks.add(task);
-            LOGGER.info("Pushed task {}. Queue size: {}", task, this.tasks.size());
+            LOGGER.debug("Pushed task {}. Queue size: [{}]", task, this.tasks.size());
 
             this.canGiveTasks.signal();
         } finally {
@@ -53,7 +53,7 @@ public class TaskQueue {
             }
 
             Task task = this.tasks.removeLast();
-            LOGGER.info("Popped task {}. Queue size: {}", task, this.tasks.size());
+            LOGGER.debug("Popped task {}. Queue size: [{}]", task, this.tasks.size());
 
             if (this.tasks.size() == this.itemsCountToResumeReceiving) {
                 LOGGER.info("Achieved tasks receiving limit. Resuming");
