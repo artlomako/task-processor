@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 class OperatorUtilsTest {
 
     @ParameterizedTest
@@ -30,7 +32,7 @@ class OperatorUtilsTest {
         // when
         int precedence = OperatorUtils.getOperatorPrecedence(operator);
         // then
-        Assertions.assertEquals(0, precedence);
+        assertEquals(0, precedence);
     }
 
     @ParameterizedTest
@@ -39,7 +41,7 @@ class OperatorUtilsTest {
         // when
         int precedence = OperatorUtils.getOperatorPrecedence(operator);
         // then
-        Assertions.assertEquals(1, precedence);
+        assertEquals(1, precedence);
     }
 
 }

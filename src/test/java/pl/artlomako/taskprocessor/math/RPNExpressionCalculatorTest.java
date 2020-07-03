@@ -1,9 +1,10 @@
 package pl.artlomako.taskprocessor.math;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RPNExpressionCalculatorTest {
 
@@ -15,7 +16,7 @@ class RPNExpressionCalculatorTest {
         // when
         BigDecimal result = RPNExpressionCalculator.calculate(rpnExpression);
         // then
-        Assertions.assertEquals(expectedResult, result);
+        assertEquals(expectedResult, result);
     }
 
     @Test
@@ -26,7 +27,7 @@ class RPNExpressionCalculatorTest {
         // when
         BigDecimal result = RPNExpressionCalculator.calculate(rpnExpression);
         // then
-        Assertions.assertEquals(expectedResult, result);
+        assertEquals(expectedResult, result);
     }
 
     @Test
@@ -37,7 +38,7 @@ class RPNExpressionCalculatorTest {
         // when
         BigDecimal result = RPNExpressionCalculator.calculate(rpnExpression);
         // then
-        Assertions.assertEquals(expectedResult, result);
+        assertEquals(expectedResult, result);
     }
 
 }
