@@ -40,7 +40,7 @@ public class InfixExpressionGenerator {
         int firstDigit = generateFirstDigit(random);
         result.append(firstDigit);
 
-        for (int i = 0; i < numberLength; i++) {
+        for (int i = 1; i < numberLength; i++) {
             int randomDigit = generateRandomDigit(random);
             result.append(randomDigit);
         }

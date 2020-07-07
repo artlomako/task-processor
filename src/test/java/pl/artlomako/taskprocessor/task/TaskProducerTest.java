@@ -1,6 +1,9 @@
 package pl.artlomako.taskprocessor.task;
 
 import org.junit.jupiter.api.Test;
+import pl.artlomako.taskprocessor.task.generic.TaskQueue;
+import pl.artlomako.taskprocessor.task.generic.impl.DummyTask;
+import pl.artlomako.taskprocessor.task.generic.impl.DummyTaskProducer;
 
 import java.util.List;
 
@@ -15,7 +18,7 @@ class TaskProducerTest {
     @Test
     public void shouldProduceTasksAndFillTheQueue() {
         // given
-        TaskQueue queue = new TaskQueue(QUEUE_SIZE_LIMIT);
+        TaskQueue<DummyTask> queue = new TaskQueue<>(QUEUE_SIZE_LIMIT);
 
         // when
         List<Thread> producerThreads = executeProducerInMultipleThreads(queue);
@@ -25,8 +28,8 @@ class TaskProducerTest {
         assertThat(queue.size()).isEqualTo(QUEUE_SIZE_LIMIT);
     }
 
-    private List<Thread> executeProducerInMultipleThreads(TaskQueue queue) {
-        TaskProducer taskProducer = new TaskProducer(queue, TaskFactory::createDummy);
+    private List<Thread> executeProducerInMultipleThreads(TaskQueue<DummyTask> queue) {
+        DummyTaskProducer taskProducer = new DummyTaskProducer(queue);
         return executeInThreads(taskProducer::run, THREADS_COUNT);
     }
 }

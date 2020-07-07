@@ -1,4 +1,4 @@
-package pl.artlomako.taskprocessor.task;
+package pl.artlomako.taskprocessor.task.generic;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,10 +8,10 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class TaskQueue {
+public class TaskQueue<T extends Task> {
     private static final Logger LOGGER = LoggerFactory.getLogger(TaskQueue.class);
 
-    private final LinkedList<Task> tasks;
+    private final LinkedList<T> tasks;
     private final Lock lock;
     private final Condition canReceiveTasks;
     private final Condition canGiveTasks;
@@ -27,7 +27,7 @@ public class TaskQueue {
         this.limit = limit;
     }
 
-    public void push(Task task) throws InterruptedException {
+    public void push(T task) throws InterruptedException {
         this.lock.lock();
         try {
             checkIfShouldStopReceiving();
@@ -41,12 +41,12 @@ public class TaskQueue {
         }
     }
 
-    public Task pop() throws InterruptedException {
+    public T pop() throws InterruptedException {
         this.lock.lock();
         try {
             checkIfShouldStopGiving();
 
-            Task task = this.tasks.removeLast();
+            T task = this.tasks.removeLast();
             LOGGER.debug("Popped task {}. Queue size: [{}]", task, this.tasks.size());
 
             checkIfShouldContinueReceiving();

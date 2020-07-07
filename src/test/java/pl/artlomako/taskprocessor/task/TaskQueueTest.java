@@ -1,6 +1,8 @@
 package pl.artlomako.taskprocessor.task;
 
 import org.junit.jupiter.api.Test;
+import pl.artlomako.taskprocessor.task.generic.TaskQueue;
+import pl.artlomako.taskprocessor.task.generic.impl.DummyTask;
 
 import java.util.List;
 
@@ -14,7 +16,7 @@ class TaskQueueTest {
     @Test
     public void threadShouldWaitAfterPopExecution_whenQueueIsEmpty() throws InterruptedException {
         // given
-        TaskQueue queue = createEmptyQueue();
+        TaskQueue<DummyTask> queue = createEmptyQueue();
         // when
         Thread popThread = executeInThreadWaitingForLatches(queue::pop, 1, 0);
         // then
@@ -28,7 +30,7 @@ class TaskQueueTest {
     @Test
     public void oneThreadShouldBeWaitingAfterPopExecution_whenPoppingByMoreThreadsThanElementsInQueue() throws InterruptedException {
         // given
-        TaskQueue queue = createQueueWithElements();
+        TaskQueue<DummyTask> queue = createQueueWithElements();
 
         // when
         List<Thread> threads = executeInThreadsWaitingForLatches(queue::pop,
@@ -46,7 +48,7 @@ class TaskQueueTest {
     @Test
     public void pushThreadShouldBeWaiting_whenSizeLimitReached() throws InterruptedException {
         // given
-        TaskQueue queue = createEmptyQueue();
+        TaskQueue<DummyTask> queue = createEmptyQueue();
 
         // when
         List<Thread> pushThreads = executeInThreadsWaitingForLatches(
@@ -65,7 +67,7 @@ class TaskQueueTest {
     @Test
     public void pushThreadShouldContinue_whenSizeLimitReachedThenConsumedHalfOfItems() throws InterruptedException {
         // given
-        TaskQueue queue = createEmptyQueue();
+        TaskQueue<DummyTask> queue = createEmptyQueue();
 
         // when
         // execute push threads
@@ -97,7 +99,7 @@ class TaskQueueTest {
     @Test
     public void popThreadShouldContinue_whenQueueBecameEmptyThenElementAdded() throws InterruptedException {
         // given
-        TaskQueue queue = createQueueWithElements();
+        TaskQueue<DummyTask> queue = createQueueWithElements();
 
         // when
         // pop threads
@@ -122,20 +124,20 @@ class TaskQueueTest {
         assertThat(queue.size()).isZero();
     }
 
-    private TaskQueue createQueueWithElements() throws InterruptedException {
-        TaskQueue taskQueue = createEmptyQueue();
+    private TaskQueue<DummyTask> createQueueWithElements() throws InterruptedException {
+        TaskQueue<DummyTask> taskQueue = createEmptyQueue();
         for (int i = 0; i < QUEUE_SIZE_LIMIT; i++) {
-            Task task = createTask();
+            DummyTask task = createTask();
             taskQueue.push(task);
         }
         return taskQueue;
     }
 
-    private TaskQueue createEmptyQueue() {
-        return new TaskQueue(QUEUE_SIZE_LIMIT);
+    private TaskQueue<DummyTask> createEmptyQueue() {
+        return new TaskQueue<>(QUEUE_SIZE_LIMIT);
     }
 
-    private Task createTask() {
-        return TaskFactory.createDummy();
+    private DummyTask createTask() {
+        return new DummyTask();
     }
 }
