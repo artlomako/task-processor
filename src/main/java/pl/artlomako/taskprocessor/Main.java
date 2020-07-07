@@ -18,11 +18,11 @@ public class Main {
         ExecutorService producersPool = Executors.newFixedThreadPool(PRODUCERS_COUNT);
         ExecutorService consumersPool = Executors.newFixedThreadPool(CONSUMERS_COUNT);
         TaskQueue taskQueue = new TaskQueue(QUEUE_SIZE_LIMIT);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < PRODUCERS_COUNT; i++) {
             producersPool.submit(new TaskProducer(taskQueue, TaskFactory::createWithRandomInfixExpression));
         }
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < CONSUMERS_COUNT; i++) {
             consumersPool.submit(new TaskConsumer(taskQueue));
         }
     }

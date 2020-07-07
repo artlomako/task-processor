@@ -18,7 +18,9 @@ public class InfixToRPNExpressionConverter {
         return String.join(TOKENS_SEPARATOR, outputStack);
     }
 
-    private static void handleToken(LinkedList<String> outputStack, LinkedList<String> temporaryStack, String token) {
+    private static void handleToken(LinkedList<String> outputStack,
+                                    LinkedList<String> temporaryStack,
+                                    String token) {
         if (OperatorUtils.isOperator(token)) {
             handleOperator(outputStack, temporaryStack, token);
             return;
@@ -27,13 +29,16 @@ public class InfixToRPNExpressionConverter {
         handleNumber(outputStack, token);
     }
 
-    private static void moveRestOfTemporaryStackToOutput(LinkedList<String> outputStack, LinkedList<String> temporaryStack) {
+    private static void moveRestOfTemporaryStackToOutput(LinkedList<String> outputStack,
+                                                         LinkedList<String> temporaryStack) {
         while (!temporaryStack.isEmpty()) {
             outputStack.add(temporaryStack.removeLast());
         }
     }
 
-    private static void handleOperator(LinkedList<String> outputStack, LinkedList<String> temporaryStack, String token) {
+    private static void handleOperator(LinkedList<String> outputStack,
+                                       LinkedList<String> temporaryStack,
+                                       String token) {
         int precedence = OperatorUtils.getOperatorPrecedence(token);
         while (!temporaryStack.isEmpty() && OperatorUtils.getOperatorPrecedence(temporaryStack.peekLast()) >= precedence) {
             outputStack.add(temporaryStack.removeLast());
@@ -41,7 +46,8 @@ public class InfixToRPNExpressionConverter {
         temporaryStack.add(token);
     }
 
-    private static boolean handleNumber(LinkedList<String> outputStack, String token) {
-        return outputStack.add(token);
+    private static void handleNumber(LinkedList<String> outputStack,
+                                     String token) {
+        outputStack.add(token);
     }
 }

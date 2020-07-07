@@ -30,15 +30,12 @@ public class TaskQueue {
     public void push(Task task) throws InterruptedException {
         this.lock.lock();
         try {
-            while (this.tasks.size() == limit) {
-                LOGGER.info("Task queue is full. Waiting");
-                this.canReceiveTasks.await();
-            }
+            checkIfShouldStopReceiving();
 
             this.tasks.add(task);
             LOGGER.debug("Pushed task {}. Queue size: [{}]", task, this.tasks.size());
 
-            this.canGiveTasks.signal();
+            continueGiving();
         } finally {
             this.lock.unlock();
         }
@@ -47,22 +44,41 @@ public class TaskQueue {
     public Task pop() throws InterruptedException {
         this.lock.lock();
         try {
-            while (this.tasks.isEmpty()) {
-                LOGGER.info("Task queue is empty. Waiting");
-                this.canGiveTasks.await();
-            }
+            checkIfShouldStopGiving();
 
             Task task = this.tasks.removeLast();
             LOGGER.debug("Popped task {}. Queue size: [{}]", task, this.tasks.size());
 
-            if (this.tasks.size() == this.itemsCountToResumeReceiving) {
-                LOGGER.info("Achieved tasks receiving limit. Resuming");
-                this.canReceiveTasks.signal();
-            }
+            checkIfShouldContinueReceiving();
 
             return task;
         } finally {
             this.lock.unlock();
+        }
+    }
+
+    private void checkIfShouldStopReceiving() throws InterruptedException {
+        while (this.tasks.size() == limit) {
+            LOGGER.info("Task queue is full. Waiting");
+            this.canReceiveTasks.await();
+        }
+    }
+
+    private void continueGiving() {
+        this.canGiveTasks.signal();
+    }
+
+    private void checkIfShouldStopGiving() throws InterruptedException {
+        while (this.tasks.isEmpty()) {
+            LOGGER.info("Task queue is empty. Waiting");
+            this.canGiveTasks.await();
+        }
+    }
+
+    private void checkIfShouldContinueReceiving() {
+        if (this.tasks.size() == this.itemsCountToResumeReceiving) {
+            LOGGER.info("Achieved tasks receiving limit. Resuming");
+            this.canReceiveTasks.signal();
         }
     }
 

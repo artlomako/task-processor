@@ -14,10 +14,12 @@ public class RPNExpressionCalculator {
     public static BigDecimal calculate(String rpnExpression) {
         LOGGER.debug("Calculating RPN expression [{}]", rpnExpression);
         String[] tokens = rpnExpression.split(TOKENS_SEPARATOR);
+
         LinkedList<BigDecimal> resultStack = new LinkedList<>();
         for (String token : tokens) {
             handleToken(resultStack, token);
         }
+
         BigDecimal result = resultStack.get(0);
         LOGGER.debug("RPN expression calculated [{}]. Result: [{}]", rpnExpression, result);
         return result;
