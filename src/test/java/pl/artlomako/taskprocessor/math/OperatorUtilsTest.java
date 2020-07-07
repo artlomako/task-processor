@@ -1,10 +1,9 @@
 package pl.artlomako.taskprocessor.math;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class OperatorUtilsTest {
 
@@ -13,8 +12,9 @@ class OperatorUtilsTest {
     public void shouldReturnTrue_whenPassedOperator(String operator) {
         // when
         boolean result = OperatorUtils.isOperator(operator);
+
         // then
-        Assertions.assertTrue(result);
+        assertThat(result).isTrue();
     }
 
     @ParameterizedTest
@@ -22,8 +22,9 @@ class OperatorUtilsTest {
     public void shouldReturnFalse_whenPassedOtherString(String operator) {
         // when
         boolean result = OperatorUtils.isOperator(operator);
+
         // then
-        Assertions.assertFalse(result);
+        assertThat(result).isFalse();
     }
 
     @ParameterizedTest
@@ -31,8 +32,9 @@ class OperatorUtilsTest {
     public void shouldReturnPrecedence0_whenOperatorHasLowerPrecedence(String operator) {
         // when
         int precedence = OperatorUtils.getOperatorPrecedence(operator);
+
         // then
-        assertEquals(0, precedence);
+        assertThat(precedence).isZero();
     }
 
     @ParameterizedTest
@@ -40,8 +42,9 @@ class OperatorUtilsTest {
     public void shouldReturnPrecedence1_whenOperatorHasHigherPrecedence(String operator) {
         // when
         int precedence = OperatorUtils.getOperatorPrecedence(operator);
+
         // then
-        assertEquals(1, precedence);
+        assertThat(precedence).isOne();
     }
 
 }

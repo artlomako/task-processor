@@ -1,44 +1,35 @@
 package pl.artlomako.taskprocessor.math;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
+import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class RPNExpressionCalculatorTest {
 
-    @Test
-    public void shouldComputeSimpleRPNExpression_whenExpressionHasOnlyFromOneNumber() {
-        // given
-        String rpnExpression = "12";
-        BigDecimal expectedResult = BigDecimal.valueOf(12);
+    @ParameterizedTest
+    @MethodSource("testCases")
+    public void shouldComputeSimpleRPNExpression_whenExpressionHasOnlyFromOneNumber(
+            String rpnExpression,
+            BigDecimal expectedResult
+    ) {
         // when
         BigDecimal result = RPNExpressionCalculator.calculate(rpnExpression);
         // then
-        assertEquals(expectedResult, result);
+        assertThat(result).isEqualTo(expectedResult);
     }
 
-    @Test
-    public void shouldComputeSimpleRPNExpression_whenExpressionHasOnlyOneOperator() {
-        // given
-        String rpnExpression = "12 14 +";
-        BigDecimal expectedResult = BigDecimal.valueOf(26);
-        // when
-        BigDecimal result = RPNExpressionCalculator.calculate(rpnExpression);
-        // then
-        assertEquals(expectedResult, result);
-    }
-
-    @Test
-    public void shouldComputeComplexRPNExpression_whenExpressionHasOnlyOneOperator() {
-        // given
-        String rpnExpression = "12 2 3 4 * 10 5 / + * +";
-        BigDecimal expectedResult = new BigDecimal("40.00");
-        // when
-        BigDecimal result = RPNExpressionCalculator.calculate(rpnExpression);
-        // then
-        assertEquals(expectedResult, result);
+    private static Stream<Arguments> testCases() {
+        return Stream.of(
+                Arguments.arguments("12", new BigDecimal("12")),
+                Arguments.arguments("12 14 +", new BigDecimal("26")),
+                Arguments.arguments("12 2 3 4 * 10 5 / + * +", new BigDecimal("40.00")),
+                Arguments.arguments("12 888 1234 / 29834934 * + 999999999 747474 / +", new BigDecimal("21482502.32"))
+        );
     }
 
 }

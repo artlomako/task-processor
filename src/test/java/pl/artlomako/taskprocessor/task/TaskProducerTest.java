@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static pl.artlomako.taskprocessor.ConcurrencyTestUtils.executeInThreads;
 import static pl.artlomako.taskprocessor.ConcurrencyTestUtils.waitForThreadsState;
 
@@ -16,11 +16,13 @@ class TaskProducerTest {
     public void shouldProduceTasksAndFillTheQueue() {
         // given
         TaskQueue queue = new TaskQueue(QUEUE_SIZE_LIMIT);
+
         // when
         List<Thread> producerThreads = executeProducerInMultipleThreads(queue);
+
         // then
         waitForThreadsState(producerThreads, Thread.State.WAITING);
-        assertEquals(QUEUE_SIZE_LIMIT, queue.size());
+        assertThat(queue.size()).isEqualTo(QUEUE_SIZE_LIMIT);
     }
 
     private List<Thread> executeProducerInMultipleThreads(TaskQueue queue) {

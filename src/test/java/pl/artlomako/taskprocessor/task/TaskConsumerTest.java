@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static pl.artlomako.taskprocessor.ConcurrencyTestUtils.executeInThreads;
 import static pl.artlomako.taskprocessor.ConcurrencyTestUtils.waitForThreadsState;
 
@@ -24,15 +23,18 @@ class TaskConsumerTest {
             queue.push(task);
             tasksInQueue.add(task);
         }
+
         // when
         List<Thread> consumerThreads = executeConsumerInMultipleThreads(queue);
+
         // then
         waitForThreadsState(consumerThreads, Thread.State.WAITING);
-        assertEquals(0, queue.size());
+        assertThat(queue.size()).isZero();
 
         boolean allTasksCompleted = tasksInQueue.stream()
                 .allMatch(Task::isCompleted);
-        assertTrue(allTasksCompleted);
+
+        assertThat(allTasksCompleted).isTrue();
     }
 
 

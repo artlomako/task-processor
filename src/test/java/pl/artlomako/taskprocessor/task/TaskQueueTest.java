@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static pl.artlomako.taskprocessor.ConcurrencyTestUtils.*;
 
 class TaskQueueTest {
@@ -22,7 +22,7 @@ class TaskQueueTest {
                 popThread,
                 Thread.State.WAITING
         );
-        assertEquals(0, queue.size());
+        assertThat(queue.size()).isZero();
     }
 
     @Test
@@ -39,7 +39,7 @@ class TaskQueueTest {
         // then
         waitForThreadsState(threads, Thread.State.TERMINATED, QUEUE_SIZE_LIMIT);
         waitForThreadsState(threads, Thread.State.WAITING, 1);
-        assertEquals(0, queue.size());
+        assertThat(queue.size()).isZero();
     }
 
 
@@ -59,7 +59,7 @@ class TaskQueueTest {
         // then
         waitForThreadsState(pushThreads, Thread.State.TERMINATED, QUEUE_SIZE_LIMIT);
         waitForThreadsState(pushThreads, Thread.State.WAITING, 1);
-        assertEquals(QUEUE_SIZE_LIMIT, queue.size());
+        assertThat(queue.size()).isEqualTo(QUEUE_SIZE_LIMIT);
     }
 
     @Test
@@ -79,7 +79,7 @@ class TaskQueueTest {
         // then
         waitForThreadsState(pushThreads, Thread.State.TERMINATED, QUEUE_SIZE_LIMIT);
         waitForThreadsState(pushThreads, Thread.State.WAITING, 1);
-        assertEquals(QUEUE_SIZE_LIMIT, queue.size());
+        assertThat(queue.size()).isEqualTo(QUEUE_SIZE_LIMIT);
 
         // execute pop threads
         List<Thread> popThreads = executeInThreadsWaitingForLatches(queue::pop,
@@ -91,7 +91,7 @@ class TaskQueueTest {
         // then
         waitForThreadsState(popThreads, Thread.State.TERMINATED);
         waitForThreadsState(pushThreads, Thread.State.TERMINATED);
-        assertEquals(QUEUE_SIZE_LIMIT / 2 + 1, queue.size());
+        assertThat(queue.size()).isEqualTo(QUEUE_SIZE_LIMIT / 2 + 1);
     }
 
     @Test
@@ -111,7 +111,7 @@ class TaskQueueTest {
         // then
         waitForThreadsState(popThreads, Thread.State.TERMINATED, QUEUE_SIZE_LIMIT);
         waitForThreadsState(popThreads, Thread.State.WAITING, 1);
-        assertEquals(0, queue.size());
+        assertThat(queue.size()).isZero();
 
         // push thread
         Thread pushTask = executeInThread(() -> queue.push(createTask()));
@@ -119,7 +119,7 @@ class TaskQueueTest {
         // then
         waitForThreadState(pushTask, Thread.State.TERMINATED);
         waitForThreadsState(popThreads, Thread.State.TERMINATED);
-        assertEquals(0, queue.size());
+        assertThat(queue.size()).isZero();
     }
 
     private TaskQueue createQueueWithElements() throws InterruptedException {
